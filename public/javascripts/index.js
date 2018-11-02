@@ -5,9 +5,17 @@ jQuery(document).ready(function(){
     secretEl = e.target;
     secretCode = e.target.value;
     if(secretCode.match(/pengarunny/)){
-      console.log("You are worthy!!")
       secretEl.classList.add("is-valid");
-      window.location.replace("/login");
+      $.ajax({
+        url: "/verify",
+        type: "POST",
+        data: {pass: "success"},
+        success: function() {
+          console.log("You are worthy!!")
+          window.location.replace("/app");
+        }
+      });
+      window.location.replace("/app");
     }
   })
 })

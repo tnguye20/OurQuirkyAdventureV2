@@ -4,9 +4,16 @@ var controller = require('../controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Our Quirky Adventure v2' });
+  if(req.session.pen !== true){
+    res.render('index', { title: 'Our Quirky Adventure v2' });
+  } else {
+    res.redirect("/app");
+  }
 });
 
+router.get('/app', controller.home);
+router.post('/verify', controller.verify);
 router.get('/login', controller.login);
+router.get('/oauthredirect', controller.oauthredirect);
 
 module.exports = router;
