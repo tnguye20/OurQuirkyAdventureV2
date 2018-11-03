@@ -20,7 +20,8 @@ module.exports.home = async (req, res, next) => {
         try{
           let paths = await getLinksAsync(token);
           if(paths.length > 0){
-            res.render("gallery", {imgs: paths, layout: false});
+            // res.render("gallery", {imgs: paths, layout: false});
+            res.render("memory", {imgs: paths, layout: false});
           }else{
             res.send({notice: "No Image Available"});
           }
