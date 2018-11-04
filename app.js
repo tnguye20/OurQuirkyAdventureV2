@@ -15,6 +15,15 @@ var client = redis.createClient();
 var crypto = require('crypto');
 var session = require('express-session');
 
+// MongoDB
+var mongoose = require('mongoose');
+mongoose
+  .connect("mongodb://drakexavior:2c2SIviQS8gQ@ds151393.mlab.com:51393/ourquirkyadventure", { useNewUrlParser: true  })
+  .then( () => { console.log("MongoDB Connection Established") } )
+  .catch( err => { console.error("Connection Fail:" + err.message)  } )
+var db = mongoose.connection;
+
+
 // Initialize session
 var sess = {
 	secret: config.SESSION_ID_SECRET,

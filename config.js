@@ -10,5 +10,7 @@ module.exports = {
   DBX_LIST_FOLDER_CONTINUE_PATH:'/2/files/list_folder/continue',
   DBX_GET_TEMPORARY_LINK_PATH:'/2/files/get_temporary_link',
   SESSION_ID_SECRET:'tHang-luV-Kat',
+  DBX_UPLOAD_DOMAIN: 'https://content.dropboxapi.com',
+  DBX_UPLOAD_PATH: '/2/files/upload',
 }
 

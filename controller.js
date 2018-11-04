@@ -1,8 +1,13 @@
-const crypto    = require("crypto"),
-      config    = require("./config"),
-      NodeCache = require('node-cache')
-      rp        = require('request-promise');
+const crypto     = require("crypto"),
+      config     = require("./config"),
+      NodeCache  = require('node-cache')
+      rp         = require('request-promise');
 var mycache = new NodeCache();
+
+const upload = require('./controller/upload');
+
+module.exports.upload = upload.upload;
+module.exports.uploadDB = upload.uploadDB;
 
 module.exports.verify = (req, res, next) => {
   if(req.body.pass == "success"){
@@ -14,25 +19,20 @@ module.exports.verify = (req, res, next) => {
 }
 
 module.exports.home = async (req, res, next) => {
-    if (req.session.pen == true){
-      let token = req.session.token;
-      if ( token ) {
-        try{
-          let paths = await getLinksAsync(token);
-          if(paths.length > 0){
-            // res.render("gallery", {imgs: paths, layout: false});
-            res.render("memory", {imgs: paths, layout: false});
-          }else{
-            res.send({notice: "No Image Available"});
-          }
-        }catch(error){
-          return next(new Error("Something went wrong when trying to retrieve token"));
+    let token = req.session.token;
+    if ( token ) {
+      try{
+        let paths = await getLinksAsync(token);
+        if(paths.length > 0){
+          res.render("gallery", {imgs: paths, layout: false});
+        }else{
+          res.send({notice: "No Image Available"});
         }
-      } else {
-        res.redirect('/login');
+      }catch(error){
+        return next(new Error("Something went wrong when trying to retrieve token"));
       }
     } else {
-      res.redirect('/');
+      res.redirect('/login');
     }
 };
 
@@ -50,6 +50,16 @@ module.exports.login = (req, res, next) => {
       + "&state="+state;
 
   res.redirect(dbxRedirect);;
+}
+
+module.exports.logout = (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) { 
+      next(err);
+    } else {
+      res.redirect("/");
+    }
+  });
 }
 
 module.exports.oauthredirect = async (req, res, next) => {
