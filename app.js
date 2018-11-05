@@ -23,6 +23,8 @@ mongoose
   .catch( err => { console.error("Connection Fail:" + err.message)  } )
 var db = mongoose.connection;
 
+// File Handle
+// const fileUpload = require('express-fileupload');
 
 // Initialize session
 var sess = {
@@ -41,6 +43,7 @@ var sess = {
 }
 
 app.use(session(sess));
+// app.use(fileUpload());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

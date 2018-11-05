@@ -1,6 +1,3 @@
-/**
- * COMMON VARIABLES
- */
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -24,6 +21,42 @@ document.addEventListener("DOMContentLoaded", function() {
     previewImages(files);
   });
 
+  const uploadForm = document.querySelector("#uploadForm");
+  uploadForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    if(uploader.files.length === 0){
+      console.log("No file to upload");
+      return false;
+    }
+
+    console.log(uploader.files.length);
+    const token = document.querySelector("#tokenHolder").value;
+    const dbx = new Dropbox.Dropbox({ accessToken: token, fetch: fetch});
+    let files = Object.values(uploader.files);
+    let uploaded = [];
+
+    // Upload Files to Dropbox and reveal preloader
+    document.querySelector(".progress").style.display = "block";
+    uploader.disabled = true;
+    for(let file of files){
+      let response = await dbx.filesUpload({path: '/' + file.name, contents: file})
+      console.log(response);
+      uploaded.push(response);
+    }
+
+    // Send Data to End Point
+    $.ajax({
+      url: "/upload",
+      type: "POST",
+      data: {data : JSON.stringify(uploaded)},
+      success: function(response) {
+        console.log(response)
+        window.location.replace("/memory");
+      }
+    });
+
+  });
 });
 
 function emptyContainer(el){
