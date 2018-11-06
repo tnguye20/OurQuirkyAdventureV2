@@ -16,7 +16,7 @@ var Memory = new Schema({
     max: 100,
     default: "I Love You!"
   },
-  memText: {
+  note: {
     type: String,
     default: "This is one of many memories with you I would love to cherish forever."
   },

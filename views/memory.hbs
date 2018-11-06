@@ -10,19 +10,28 @@
     </head>
 
     <body>
-
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo">Logo</a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/app">Gallery</a></li>
+            <li><a href="/upload">Upload</a></li>
+            <li><a href="/memory">Memory</a></li>
+          </ul>
+        </div>
+      </nav>
        <div class="container">
         <div class="row">
           {{#each data}}
-              <div class="col s4">
+              <div class="col s12 m4">
               <div class="card">
                 <div class="card-image">
                   <img src="{{ this.link }}">
-                  <span class="card-title">{{ this.title  }}</span>
+                  <span class="card-title">{{ this.title }}</span>
                   <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
                 </div>
                 <div class="card-content">
-                  <p>{{ this.memText }}</p>
+                  <p>{{ this.note }}</p>
                 </div>
             </div>
           </div>

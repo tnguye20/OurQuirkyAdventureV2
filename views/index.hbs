@@ -1,31 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
-      <script type='text/javascript' src='/javascripts/index.js'></script>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <link rel="stylesheet" href="/stylesheets/index.css">
-</head>
-<body>
-  <div class="container">
-    <div class="text-center">
-      <h4>{{title}}</h4>
-      <img class="" src="/images/home_cat.gif">
-    </div>
-    <div class="row">
-      <div class="col-sm-10 offset-sm-1 text-center">
-        <div class="info-form">
-          <form action="" class="form-inline justify-content-center">
-              <div class="form-group">
-                  <label class="sr-only">Secret Code</label>
-                  <input type="password" class="form-control" name="secretCode" id="secretCode"  placeholder="Enter Secret Code...">
+    </head>
+
+      <div class="container">
+        <div class="row">
+          <div class="col m4 offset-m4 s12">
+            <h4 class="center-align">{{ title }}</h4>
+            <img class="responsive-img" src="/images/home_cat.gif">
+            <form action="">
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">mode_edit</i>
+                  <input type="password" id="secretCode" name="secretCode" class="validate" placeholder="  ">
+                  <label for="secretCode">Secret Code</labeVl>
+                </div>
               </div>
             </form>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</body>
-</html>
+
+      <!--JavaScript at end of body for optimized loading-->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script type='text/javascript' src='/javascripts/index.js'></script>
+    </body>
+  </html>

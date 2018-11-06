@@ -15,9 +15,9 @@ module.exports.memory = memory.memory;
 module.exports.verify = (req, res, next) => {
   if(req.body.pass == "success"){
     req.session.pen = true;
-    res.redirect("/app");
+    res.send(true);
   }else{
-    res.redirect('https://google.com');
+    res.send(false);
   }
 }
 

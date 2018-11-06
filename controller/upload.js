@@ -9,10 +9,18 @@ module.exports.upload = (req, res, next) => {
 
 // Handle Upload File logic
 module.exports.uploadDB = async (req, res, next) => {
-  const uploadedData = JSON.parse(req.body.data);
+  const DbxData = JSON.parse(req.body.DbxInfo);
+  const MemData = JSON.parse(req.body.MemInfo);
+
+  const defaultTitle = "I love you!";
+  const defaultNote = "This is one of many memories with you I would love to cherish forever.";
+
+  console.log(MemData);
   let promises = [];
-  uploadedData.forEach( (data, i) => {
+  DbxData.forEach( (data, i) => {
     let newMemory = new Memory({
+      title: (MemData[i].title !== '') ? MemData[i].title : defaultTitle,
+      note: (MemData[i].note !== '') ? MemData[i].note : defaultNote,
       dropboxID: data.id,
       name: data.name,
       size: data.size,

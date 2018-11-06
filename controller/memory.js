@@ -10,6 +10,6 @@ module.exports.memory = async (req, res, next) => {
     }
     res.render("memory", {data: results});
   }else{
-    res.send("Nohing here :3")
+    res.redirect("/upload");
   }
 }

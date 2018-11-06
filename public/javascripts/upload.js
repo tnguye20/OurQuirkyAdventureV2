@@ -1,5 +1,12 @@
+var infoContainerObj = {};
+var infoContainer, infoTitle, infoNote, infoSeq;
 
 document.addEventListener("DOMContentLoaded", function() {
+
+  infoContainer = document.querySelector("#infoContainer");
+  infoTitle = document.querySelector("#infoTitle");
+  infoNote = document.querySelector("#infoNote");
+  infoSeq = document.querySelector("#infoSeq");
 
   // Detect Onload File to setup Preview
   const uploader = document.querySelector("#memoryUpload");
@@ -38,18 +45,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Upload Files to Dropbox and reveal preloader
     document.querySelector(".progress").style.display = "block";
+    let promises = [];
     uploader.disabled = true;
-    for(let file of files){
-      let response = await dbx.filesUpload({path: '/' + file.name, contents: file})
-      console.log(response);
-      uploaded.push(response);
-    }
+    files.forEach( (file) => {
+      promises.push(dbx.filesUpload({path: '/' + file.name, contents: file}));
+    } );
+
+    uploaded = await Promise.all(promises);
 
     // Send Data to End Point
     $.ajax({
       url: "/upload",
       type: "POST",
-      data: {data : JSON.stringify(uploaded)},
+      data: {
+              DbxInfo : JSON.stringify(uploaded),
+              MemInfo : JSON.stringify(infoContainerObj)
+            },
       success: function(response) {
         console.log(response)
         window.location.replace("/memory");
@@ -57,7 +68,39 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
   });
+
+  document.addEventListener("keyup", function(e) {
+    if(e.key === "Escape"){
+      infoContainer.style.display = "none";
+    }
+  })
+
+  const infoSubmit = document.querySelector("#infoSubmit");
+  infoSubmit.addEventListener("click", function(e) {
+    e.preventDefault();
+    let i = infoSeq.value;
+    infoContainerObj[i].title = infoTitle.value;
+    infoContainerObj[i].note = infoNote.value;
+    modalToggle();
+  })
 });
+
+
+
+function modalToggle(i){
+  infoContainer.style.display = (infoContainer.style.display === "none" || infoContainer.style.display === "") ? "block" : "none";
+
+  if(i === undefined) return;
+
+  // Populate Data according to Obj
+  infoTitle.value = infoContainerObj[i].title;
+  infoNote.value = infoContainerObj[i].note;
+  infoSeq.value = i;
+}
+
+function imageInfo(i){
+  modalToggle(i);
+}
 
 function emptyContainer(el){
   el.innerHTML = '';
@@ -67,7 +110,6 @@ function previewImages(files){
   const previewContainer = document.querySelector("#previewContainer");
   emptyContainer(previewContainer);
 
-
   for(let i = 0; i < files.length; i ++){
     // Instantiate FileReader Object
     const reader = new FileReader();
@@ -76,7 +118,11 @@ function previewImages(files){
     reader.onload = function(){
       let src = reader.result;
       if(src !== null){
-        previewContainer.appendChild(createImageElement(src));
+        previewContainer.appendChild(createImageElement(src, i));
+        infoContainerObj[i] = {
+          title: "",
+          note: ""
+        };
       }else{
         console.log("Bad URL");
         return false;
@@ -87,10 +133,10 @@ function previewImages(files){
 }
 
 
-function createImageElement(src){
+function createImageElement(src, i){
   // Image Container Element
   let div = document.createElement("div");
-  div.classList.add("col","s4");
+  div.classList.add("col","s4", "info_" + i);
 
   // Image Element
   let img = document.createElement("img");
@@ -98,6 +144,7 @@ function createImageElement(src){
   img.src = src;
 
   div.appendChild(img);
+  div.addEventListener("click", () => { imageInfo(i) });
 
   return div;
 }
