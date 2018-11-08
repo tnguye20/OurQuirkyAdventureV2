@@ -1,0 +1,12 @@
+.imgContainer {
+  opacity: 0;
+  transition: all 2s ease-in-out;
+}
+
+.heartSpin {
+  transition: all .5s ease-in-out;
+}
+
+.heartSpin:hover {
+  transform: rotateY(180deg);
+}
