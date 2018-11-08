@@ -7,28 +7,30 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="stylesheet" href="/stylesheets/memory.css">
     </head>
 
     <body>
       <nav>
-        <div class="nav-wrapper">
-          <a href="#" class="brand-logo">Logo</a>
+        <div class="nav-wrapper teal">
+          <a href="#" class="brand-logo">Our Quirky Adventure</a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="/app">Gallery</a></li>
-            <li><a href="/upload">Upload</a></li>
             <li><a href="/memory">Memory</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/upload">Upload</a></li>
+            <li><a href="/logout">Logout</a></li>
           </ul>
         </div>
       </nav>
        <div class="container">
         <div class="row">
           {{#each data}}
-              <div class="col s12 m4">
+              <div class="col s12 m4 imgContainer">
               <div class="card">
                 <div class="card-image">
                   <img src="{{ this.link }}">
                   <span class="card-title">{{ this.title }}</span>
-                  <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                  <a class="btn-floating halfway-fab waves-effect waves-light red heartSpin"><i class="material-icons">favorite</i></a>
                 </div>
                 <div class="card-content">
                   <p>{{ this.note }}</p>
@@ -41,5 +43,6 @@
 
       <!--JavaScript at end of body for optimized loading-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script type='text/javascript' src='/javascripts/memory.js'></script>
     </body>
   </html>

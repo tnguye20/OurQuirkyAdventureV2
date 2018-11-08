@@ -9,7 +9,7 @@ jQuery(document).ready(function(){
         url: "/verify",
         type: "POST",
         data: {pass: "success"},
-        success: function() {
+        success: function(response) {
           window.location.replace("/app");
         }
       });

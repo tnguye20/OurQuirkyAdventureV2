@@ -6,6 +6,7 @@ var mycache = new NodeCache();
 
 const upload = require('./controller/upload');
 const memory = require('./controller/memory');
+const gallery = require('./controller/gallery');
 const functions = require('./controller/functions');
 
 module.exports.upload = upload.upload;
@@ -21,19 +22,22 @@ module.exports.verify = (req, res, next) => {
   }
 }
 
+module.exports.gallery = gallery.gallery;
+
 module.exports.home = async (req, res, next) => {
     let token = req.session.token;
     if ( token ) {
-      try{
-        let paths = await functions.getLinksAsync(token);
-        if(paths.length > 0){
-          res.render("gallery", {imgs: paths, layout: false});
-        }else{
-          res.send({notice: "No Image Available"});
-        }
-      }catch(error){
-        return next(new Error("Something went wrong when trying to retrieve token"));
-      }
+      // try{
+      //   let paths = await functions.getLinksAsync(token);
+      //   if(paths.length > 0){
+      //     res.render("gallery", {imgs: paths, layout: false});
+      //   }else{
+      //     res.send({notice: "No Image Available"});
+      //   }
+      // }catch(error){
+      //   return next(new Error("Something went wrong when trying to retrieve token"));
+      // }
+      res.redirect("/memory");
     } else {
       res.redirect('/login');
     }

@@ -14,10 +14,11 @@ router.get('/', function(req, res, next) {
 
 router.get('/app', middleware.isSession, controller.home);
 router.post('/verify', controller.verify);
-router.get('/login', controller.login);
-router.get('/oauthredirect', controller.oauthredirect);
+router.get('/login', middleware.isSessionSoft, controller.login);
+router.get('/oauthredirect', middleware.isSessionSoft, controller.oauthredirect);
 router.get("/upload", middleware.isSession, controller.upload);
 router.get("/memory", middleware.isSession, controller.memory);
+router.get("/gallery", middleware.isSession, controller.gallery);
 router.post("/upload", middleware.isSession, controller.uploadDB);
 router.get("/logout", middleware.isSession, controller.logout);
 

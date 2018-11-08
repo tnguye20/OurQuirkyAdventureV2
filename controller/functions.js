@@ -1,4 +1,5 @@
 const config = require("../config");
+const Memory = require("../models/memory.js");
 
 //Returns a promise that fulfills when a new session is created
 const regenerateSessionAsync =  function regenerateSessionAsync(req){
@@ -90,18 +91,28 @@ const getTemporaryLinksForPathsAsync =  function getTemporaryLinksForPathsAsync(
   return Promise.all(promises);
 }
 
-const getTemporaryLinkAsync = async function getTemporaryLinkAsync(token, path){
+const getTemporaryLinkAsync = async function getTemporaryLinkAsync(token, item){
   let options={
     url: config.DBX_API_DOMAIN + config.DBX_GET_TEMPORARY_LINK_PATH,
     headers:{"Authorization":"Bearer "+token},
     method: 'POST',
     json: true,
-    body: { "path": path }
+    body: { "path": item.path_lower }
   }
   let result = await rp(options);
-  return result.link ;
+  item.link = result.link;
+  return item ;
 }
 
+// Query Memory Schema, get dropbox resources and append temporary links to the result
+const getMemoryWithLinks = async function getMemoryWithLinks(token){
+  const results = await Memory.find({}).lean().exec();
+  const promises = []
+  results.forEach( (result) => {
+    promises.push(getTemporaryLinkAsync(token, result));
+  } );
+  return Promise.all(promises);
+}
 
 /**
  *  EXPORT
@@ -110,6 +121,6 @@ module.exports.getLinksAsync = getLinksAsync;
 module.exports.regenerateSessionAsync = regenerateSessionAsync;
 module.exports.getTemporaryLinksForPathsAsync = getTemporaryLinksForPathsAsync;
 module.exports.getTemporaryLinkAsync = getTemporaryLinkAsync;
-
+module.exports.getMemoryWithLinks = getMemoryWithLinks;
 
 

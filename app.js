@@ -1,33 +1,26 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-
-var app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const indexRouter = require('./routes/index');
+const app = express();
 
 // Session management
-var config = require("./config");
-var redis = require('redis');
-var client = redis.createClient();
-var crypto = require('crypto');
-var session = require('express-session');
-
+const config = require("./config");
+const crypto = require('crypto');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 // MongoDB
-var mongoose = require('mongoose');
+const  mongoose = require('mongoose');
 mongoose
   .connect("mongodb://drakexavior:2c2SIviQS8gQ@ds151393.mlab.com:51393/ourquirkyadventure", { useNewUrlParser: true  })
   .then( () => { console.log("MongoDB Connection Established") } )
   .catch( err => { console.error("Connection Fail:" + err.message)  } )
-var db = mongoose.connection;
-
-// File Handle
-// const fileUpload = require('express-fileupload');
+const db = mongoose.connection;
 
 // Initialize session
-var sess = {
+const sess = {
 	secret: config.SESSION_ID_SECRET,
   cookie: {}, //add empty cookie to the session by default
   resave: false,
@@ -35,15 +28,12 @@ var sess = {
   genid: (req) => {
   	return crypto.randomBytes(16).toString('hex');;
   },
-  store: new (require('express-sessions'))({
-      storage: 'redis',
-      instance: client, // optional
-      collection: 'sessions' // optional
+  store: new MongoStore({
+    mongooseConnection: db
   })
 }
 
 app.use(session(sess));
-// app.use(fileUpload());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
