@@ -25,10 +25,10 @@
        <div class="container">
         <div class="row">
           {{#each data}}
-              <div class="col s12 m4 imgContainer">
+          <div class="col s12 m4 imgContainer" >
               <div class="card">
                 <div class="card-image">
-                  <img src="{{ this.link }}">
+                  <img src="{{ this.link }}" data-mask="{{ this._id  }}">
                   <span class="card-title">{{ this.title }}</span>
                   <a class="btn-floating halfway-fab waves-effect waves-light red heartSpin"><i class="material-icons">favorite</i></a>
                 </div>

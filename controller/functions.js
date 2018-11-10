@@ -114,6 +114,12 @@ const getMemoryWithLinks = async function getMemoryWithLinks(token){
   return Promise.all(promises);
 }
 
+// Query Memory Schema using ID and return the LEAN object
+const getMemoryById = async function getMemoryById(token, id){
+  const result = await Memory.findOne({ _id: id  }).lean().exec();
+  return await getTemporaryLinkAsync(token, result);
+}
+
 /**
  *  EXPORT
  */
@@ -122,5 +128,6 @@ module.exports.regenerateSessionAsync = regenerateSessionAsync;
 module.exports.getTemporaryLinksForPathsAsync = getTemporaryLinksForPathsAsync;
 module.exports.getTemporaryLinkAsync = getTemporaryLinkAsync;
 module.exports.getMemoryWithLinks = getMemoryWithLinks;
+module.exports.getMemoryById = getMemoryById;
 
 

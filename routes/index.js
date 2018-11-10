@@ -18,6 +18,8 @@ router.get('/login', middleware.isSessionSoft, controller.login);
 router.get('/oauthredirect', middleware.isSessionSoft, controller.oauthredirect);
 router.get("/upload", middleware.isSession, controller.upload);
 router.get("/memory", middleware.isSession, controller.memory);
+router.get("/memory/:mem_id", middleware.isSession, controller.loadMemoryById);
+router.post("/memory/:mem_id", middleware.isSession, controller.postMemoryById);
 router.get("/gallery", middleware.isSession, controller.gallery);
 router.post("/upload", middleware.isSession, controller.uploadDB);
 router.get("/logout", middleware.isSession, controller.logout);

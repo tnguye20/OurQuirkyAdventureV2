@@ -15,6 +15,8 @@ module.exports = {
   OAUTH_REDIRECT_URL: process.env.OAUTH_REDIRECT_URL,
   SESSION_ID_SECRET: process.env.SESSION_ID_SECRET,
   MONGO_USER: process.env.MONGO_USER,
-  MONGO_PW: process.env.MONGO_PW
+  MONGO_PW: process.env.MONGO_PW,
+  defaultTitle: "I love you!",
+  defaultNote: "This is one of many memories with you I would love to cherish forever."
 }
 
