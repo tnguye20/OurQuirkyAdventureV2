@@ -94,7 +94,7 @@ const getTemporaryLinksForPathsAsync =  function getTemporaryLinksForPathsAsync(
 const getTemporaryLinkAsync = async function getTemporaryLinkAsync(token, item){
   let options={
     url: config.DBX_API_DOMAIN + config.DBX_GET_TEMPORARY_LINK_PATH,
-    headers:{"Authorization":"Bearer "+token},
+    headers:{"Authorization":"Bearer "+ token},
     method: 'POST',
     json: true,
     body: { "path": item.path_lower }
@@ -105,8 +105,8 @@ const getTemporaryLinkAsync = async function getTemporaryLinkAsync(token, item){
 }
 
 // Query Memory Schema, get dropbox resources and append temporary links to the result
-const getMemoryWithLinks = async function getMemoryWithLinks(token){
-  const results = await Memory.find({}).lean().exec();
+const getMemoryWithLinks = async function getMemoryWithLinks(token, userID){
+  const results = await Memory.find({ dropboxUserID: userID }).lean().exec();
   const promises = []
   results.forEach( (result) => {
     promises.push(getTemporaryLinkAsync(token, result));
@@ -115,8 +115,8 @@ const getMemoryWithLinks = async function getMemoryWithLinks(token){
 }
 
 // Query Memory Schema using ID and return the LEAN object
-const getMemoryById = async function getMemoryById(token, id){
-  const result = await Memory.findOne({ _id: id  }).lean().exec();
+const getMemoryById = async function getMemoryById(token, id, userID){
+  const result = await Memory.findOne({ _id: id, dropboxUserID: userID  }).lean().exec();
   return await getTemporaryLinkAsync(token, result);
 }
 

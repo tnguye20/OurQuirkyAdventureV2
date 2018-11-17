@@ -9,16 +9,20 @@ const fetch = require('node-fetch');
 */
 
 module.exports.memory = async (req, res, next) => {
-  const results = await functions.getMemoryWithLinks(req.session.token);
-  if(results.length > 0){
-    res.render("memory", {data: results});
-  }else{
-   res.redirect("/upload");
+  try{
+    const results = await functions.getMemoryWithLinks(req.session.token, req.session.dropboxUserID);
+    if(results.length > 0){
+      res.render("memory", {data: results});
+    }else{
+     res.redirect("/upload");
+    }
+  } catch(e) {
+   next(e);
   }
 }
 
 module.exports.loadMemoryById = async(req, res, next) => {
-  const result = await functions.getMemoryById(req.session.token, req.params.mem_id);
+  const result = await functions.getMemoryById(req.session.token, req.params.mem_id, req.session.dropboxUserID);
   res.render("memoryEdit", {data: result});
 }
 

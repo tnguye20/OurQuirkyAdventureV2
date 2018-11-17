@@ -6,6 +6,7 @@ var Memory = new Schema({
     type: String,
     required: true
   },
+  dropboxUserID: String,
   name: {
     type: String,
     max: 100,
@@ -20,7 +21,11 @@ var Memory = new Schema({
     type: String,
     default: "This is one of many memories with you I would love to cherish forever."
   },
-  date: {
+  dateCreated: {
+    type: Date,
+    default: Date.now()
+  },
+  lastModified: {
     type: Date,
     default: Date.now()
   },

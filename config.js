@@ -1,6 +1,7 @@
 require('dotenv').config({silent: true});
 
 module.exports = {
+  ENV: process.env.ENV,
   DBX_API_DOMAIN: 'https://api.dropboxapi.com',
   DBX_OAUTH_DOMAIN: 'https://www.dropbox.com',
   DBX_OAUTH_PATH: '/oauth2/authorize',
@@ -16,6 +17,8 @@ module.exports = {
   SESSION_ID_SECRET: process.env.SESSION_ID_SECRET,
   MONGO_USER: process.env.MONGO_USER,
   MONGO_PW: process.env.MONGO_PW,
+  MONGO_CONNECTOR_DEV: process.env.MONGO_CONNECTOR_DEV,
+  MONGO_CONNECTOR_PROD: process.env.MONGO_CONNECTOR_PROD,
   defaultTitle: "I love you!",
   defaultNote: "This is one of many memories with you I would love to cherish forever."
 }

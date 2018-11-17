@@ -14,7 +14,7 @@ const MongoStore = require('connect-mongo')(session);
 // MongoDB
 const  mongoose = require('mongoose');
 mongoose
-  .connect(`mongodb://${config.MONGO_USER}:${config.MONGO_PW}@ds151393.mlab.com:51393/ourquirkyadventure`, { useNewUrlParser: true  })
+  .connect(`mongodb://${config.MONGO_USER}:${config.MONGO_PW}@${ (config.ENV == 'PROD') ? config.MONGO_CONNECTOR_PROD : config.MONGO_CONNECTOR_DEV  }`, { useNewUrlParser: true  })
   .then( () => { console.log("MongoDB Connection Established") } )
   .catch( err => { console.error("Connection Fail:" + err.message)  } )
 const db = mongoose.connection;

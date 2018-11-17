@@ -20,6 +20,7 @@ module.exports.uploadDB = async (req, res, next) => {
       title: (MemData[i].title !== '') ? MemData[i].title : config.defaultTitle,
       note: (MemData[i].note !== '') ? MemData[i].note : config.defaultNote,
       dropboxID: data.id,
+      dropboxUserID: req.session.dropboxUserID,
       name: data.name,
       size: data.size,
       path_lower: data.path_lower,

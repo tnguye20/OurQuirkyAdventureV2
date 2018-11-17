@@ -1,9 +1,10 @@
 const crypto     = require("crypto"),
       config     = require("./config"),
       NodeCache  = require('node-cache')
-      rp         = require('request-promise');
-var mycache = new NodeCache();
+      rp         = require('request-promise'),
+      mycache    = new NodeCache();
 
+const User = require("./models/user");
 const upload = require('./controller/upload');
 const memory = require('./controller/memory');
 const gallery = require('./controller/gallery');
@@ -51,9 +52,9 @@ module.exports.login = (req, res, next) => {
   res.redirect(dbxRedirect);;
 }
 
-module.exports.logout = (req, res, next) => {
+module.exports.logout = async (req, res, next) => {
   req.session.destroy((err) => {
-    if (err) { 
+    if (err) {
       next(err);
     } else {
       res.redirect("/");
@@ -90,7 +91,35 @@ module.exports.oauthredirect = async (req, res, next) => {
       let response = await rp(options);
       await functions.regenerateSessionAsync(req);
       req.session.token = response.access_token;
+
+      const userObjectId = response.account_id;
+
+      // Check User Existence
+      const isExist = await User.findOne({
+        dropboxUserID: userObjectId
+      }).count();
+      console.log(`isExist = ${isExist}`);
+
+      if(isExist === 1){
+        // User Exist, Update Last Login
+        await User.findOneAndUpdate({
+         dropboxUserID : userObjectId
+        }, {
+          lastLogin: Date.now()
+        });
+      } else {
+        // New User, Proceed to add
+        const newUser = new User({
+          dropboxUserID: userObjectId,
+          lastLogin: Date.now(),
+          lastModified: Date.now()
+        });
+
+        await newUser.save();
+      }
+
       req.session.pen = true;
+      req.session.dropboxUserID = userObjectId;
       res.redirect('/app');
     } catch (error) {
       return next(new Error("error getting token. " + error.message));
