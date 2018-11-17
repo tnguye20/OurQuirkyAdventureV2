@@ -6,15 +6,43 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const app = express();
 
+// Header Helmet
+const helmet = require('helmet');
+app.use(helmet());
+// Implement CSP with Helmet
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'","https://ajax.googleapis.com/","https://cdnjs.cloudflare.com/","https://cdn.jsdelivr.net/"],
+    connectSrc: ["https://content.dropboxapi.com/", "'self'"],
+    styleSrc: ["'self'","'unsafe-inline'","https://cdnjs.cloudflare.com/","https://fonts.googleapis.com/"],
+    imgSrc: ["'self'","https://dl.dropboxusercontent.com", "data:"],
+    fontSrc: ["https://fonts.gstatic.com/"],
+    mediaSrc: ["'none'"],
+    frameSrc: ["'none'"]
+  },
+
+  // Set to true if you want to blindly set all headers: Content-Security-Policy,
+  // X-WebKit-CSP, and X-Content-Security-Policy.
+  setAllHeaders: true
+}));
+
+//cookie security for production: only via https
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true // serve secure cookies
+}
+
 // Session management
 const config = require("./config");
 const crypto = require('crypto');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+
 // MongoDB
 const  mongoose = require('mongoose');
 mongoose
-  .connect(`mongodb://${config.MONGO_USER}:${config.MONGO_PW}@${ (config.ENV == 'PROD') ? config.MONGO_CONNECTOR_PROD : config.MONGO_CONNECTOR_DEV  }`, { useNewUrlParser: true  })
+  .connect(`mongodb://${config.MONGO_USER}:${config.MONGO_PW}@${ (app.get('env') == 'production') ? config.MONGO_CONNECTOR_PROD : config.MONGO_CONNECTOR_DEV  }`, { useNewUrlParser: true  })
   .then( () => { console.log("MongoDB Connection Established") } )
   .catch( err => { console.error("Connection Fail:" + err.message)  } )
 const db = mongoose.connection;

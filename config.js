@@ -1,7 +1,6 @@
 require('dotenv').config({silent: true});
 
 module.exports = {
-  ENV: process.env.ENV,
   DBX_API_DOMAIN: 'https://api.dropboxapi.com',
   DBX_OAUTH_DOMAIN: 'https://www.dropbox.com',
   DBX_OAUTH_PATH: '/oauth2/authorize',
@@ -11,6 +10,7 @@ module.exports = {
   DBX_GET_TEMPORARY_LINK_PATH:'/2/files/get_temporary_link',
   DBX_UPLOAD_DOMAIN: 'https://content.dropboxapi.com',
   DBX_UPLOAD_PATH: '/2/files/upload',
+  DBX_TOKEN_REVOKE_PATH:'/2/auth/token/revoke',
   DBX_APP_KEY: process.env.DBX_APP_KEY,
   DBX_APP_SECRET: process.env.DBX_APP_SECRET,
   OAUTH_REDIRECT_URL: process.env.OAUTH_REDIRECT_URL,

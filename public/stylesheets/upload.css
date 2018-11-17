@@ -24,3 +24,7 @@ button {
   transform: translatey(-50%);
   background-color: white;
 }
+
+.progress{
+  display: none;
+}
