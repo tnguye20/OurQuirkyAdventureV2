@@ -1,18 +1,20 @@
-jQuery(document).ready(function(){
+
+document.addEventListener("DOMContentLoaded", function() {
   var serectCode = "",
       secretEl;
-  $("input#secretCode").on("keyup", function(e){
+  document.querySelector("input#secretCode").addEventListener("keyup", function(e){
     secretEl = e.target;
     secretCode = e.target.value;
-    if(secretCode.match(/pengarunny/)){
-      $.ajax({
-        url: "/verify",
-        type: "POST",
-        data: {pass: "success"},
-        success: function(response) {
-          window.location.replace("/app");
-        }
-      });
+    const formData = new FormData();
+    if(secretCode.length >= 10){
+      formData.append("passPhrase", secretCode);
+      makeRequest("POST", "/verify", formData)
+        .then((res) => {
+            console.log(res)
+            if(res == true){
+              window.location.replace("/app");
+            }
+        })
     }
   })
 })

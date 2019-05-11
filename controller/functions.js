@@ -106,7 +106,7 @@ const getTemporaryLinkAsync = async function getTemporaryLinkAsync(token, item){
 
 // Query Memory Schema, get dropbox resources and append temporary links to the result
 const getMemoryWithLinks = async function getMemoryWithLinks(token, userID){
-  const results = await Memory.find({ dropboxUserID: userID }).lean().exec();
+  const results = await Memory.find({ dropboxUserID: userID }).sort({dateCreated: -1}).lean().exec();
   const promises = []
   results.forEach( (result) => {
     promises.push(getTemporaryLinkAsync(token, result));

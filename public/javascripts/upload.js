@@ -1,15 +1,24 @@
 var infoContainerObj = {};
 var infoContainer, infoTitle, infoNote, infoSeq;
 
+var rotation = {
+  1: 'rotate(0deg)',
+  3: 'rotate(180deg)',
+  6: 'rotate(90deg)',
+  8: 'rotate(270deg)'
+};
+
 document.addEventListener("DOMContentLoaded", function() {
 
   infoContainer = document.querySelector("#infoContainer");
   infoTitle = document.querySelector("#infoTitle");
   infoNote = document.querySelector("#infoNote");
   infoSeq = document.querySelector("#infoSeq");
+  const uploadForm = document.querySelector("#uploadForm");
+  const uploader = document.querySelector("#memoryUpload");
+  const previewContainer = document.querySelector("#previewContainer");
 
   // Detect Onload File to setup Preview
-  const uploader = document.querySelector("#memoryUpload");
   uploader.addEventListener("change", function(e){
     let files = Object.values(e.target.files);
 
@@ -24,11 +33,9 @@ document.addEventListener("DOMContentLoaded", function() {
       };
     }
 
-    // Proceed to preview the images
     previewImages(files);
   });
 
-  const uploadForm = document.querySelector("#uploadForm");
   uploadForm.addEventListener("submit", async function(e){
     e.preventDefault();
 
@@ -37,36 +44,20 @@ document.addEventListener("DOMContentLoaded", function() {
       return false;
     }
 
-    console.log(uploader.files.length);
-    const token = document.querySelector("#tokenHolder").value;
-    const dbx = new Dropbox.Dropbox({ accessToken: token, fetch: fetch});
-    let files = Object.values(uploader.files);
-    let uploaded = [];
+    const formData = new FormData(uploadForm);
+    formData.append("memInfo", JSON.stringify(infoContainerObj));
 
-    // Upload Files to Dropbox and reveal preloader
     document.querySelector(".progress").style.display = "block";
-    let promises = [];
     uploader.disabled = true;
-    files.forEach( (file) => {
-      promises.push(dbx.filesUpload({path: '/' + file.name, contents: file}));
-    } );
 
-    uploaded = await Promise.all(promises);
-
-    // Send Data to End Point
-    $.ajax({
-      url: "/upload",
-      type: "POST",
-      data: {
-              DbxInfo : JSON.stringify(uploaded),
-              MemInfo : JSON.stringify(infoContainerObj)
-            },
-      success: function(response) {
-        console.log(response)
-        window.location.replace("/memory");
-      }
-    });
-
+    makeRequest("POST", "/upload", formData)
+      .then( res => {
+          if(res.statusCode === 0){
+            window.location.replace("/memory");
+          } else {
+            console.log(res.status);
+          }
+      })
   });
 
   document.addEventListener("keyup", function(e) {
@@ -106,42 +97,83 @@ function emptyContainer(el){
   el.innerHTML = '';
 }
 
+function _arrayBufferToBase64( buffer ) {
+  var binary = ''
+  var bytes = new Uint8Array( buffer )
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode( bytes[ i ] )
+  }
+  return window.btoa( binary );
+}
+
 function previewImages(files){
-  const previewContainer = document.querySelector("#previewContainer");
   emptyContainer(previewContainer);
 
   for(let i = 0; i < files.length; i ++){
-    // Instantiate FileReader Object
-    const reader = new FileReader();
-
-    // Construct File Objects to Blob File for preview
-    reader.onload = function(){
-      let src = reader.result;
-      if(src !== null){
-        previewContainer.appendChild(createImageElement(src, i));
-        infoContainerObj[i] = {
-          title: "",
-          note: ""
-        };
-      }else{
-        console.log("Bad URL");
-        return false;
-      }
-    }
-    reader.readAsDataURL(files[i]);
+    imgOrientation(files[i], (base64img, value) => {
+      previewContainer.appendChild(createImageElement(base64img, i, value));
+      infoContainerObj[i] = {
+        title: "",
+        note: "",
+        isRotate: (value == 3 | value == 6 | value == 9) ? true : false
+      };
+    })
   }
 }
 
+function imgOrientation(file, callback){
+    const fileReader = new FileReader()
+    fileReader.onloadend = function(){
+      let base64img = "data:"+file.type+";base64," + _arrayBufferToBase64(fileReader.result);
+      let scanner = new DataView(fileReader.result);
+      let idx = 0;
+      let value = 1; // Non-rotated is the default
+      if(fileReader.result.length < 2 || scanner.getUint16(idx) != 0xFFD8) {
+        // Not a JPEG
+        if(callback) {
+          callback(base64img, value);
+        }
+        return;
+      }
+      idx += 2;
+      let maxBytes = scanner.byteLength;
+      while(idx < maxBytes - 2) {
+        let uint16 = scanner.getUint16(idx);
+        idx += 2;
+        switch(uint16) {
+          case 0xFFE1: // Start of EXIF
+            let exifLength = scanner.getUint16(idx);
+            maxBytes = exifLength - idx;
+            idx += 2;
+            break;
+          case 0x0112: // Orientation tag
+            // Read the value, its 6 bytes further out
+            // See page 102 at the following URL
+            // http://www.kodak.com/global/plugins/acrobat/en/service/digCam/exifStandard2.pdf
+            value = scanner.getUint16(idx + 6, false);
+            maxBytes = 0; // Stop scanning
+            break;
+        }
+      }
+      if(callback) {
+        callback(base64img, value);
+      }
+    }
+    fileReader.readAsArrayBuffer(file);
+}
 
-function createImageElement(src, i){
+function createImageElement(src, i, value){
   // Image Container Element
   let div = document.createElement("div");
   div.classList.add("col","s4", "info_" + i);
+  div.style.transform = rotation[value];
 
   // Image Element
   let img = document.createElement("img");
-  img.classList.add("responsive-img");
   img.src = src;
+  // img.style.transform = rotation[value];
+  img.classList.add("responsive-img");
 
   div.appendChild(img);
   div.addEventListener("click", () => { imageInfo(i) });

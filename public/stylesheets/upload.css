@@ -28,3 +28,7 @@ button {
 .progress{
   display: none;
 }
+
+#previewContainer {
+  margin: 100px auto;
+}

@@ -19,6 +19,7 @@ module.exports = {
   MONGO_PW: process.env.MONGO_PW,
   MONGO_CONNECTOR_DEV: process.env.MONGO_CONNECTOR_DEV,
   MONGO_CONNECTOR_PROD: process.env.MONGO_CONNECTOR_PROD,
+  passPhrase: process.env.passPhrase,
   defaultTitle: "I love you!",
   defaultNote: "This is one of many memories with you I would love to cherish forever."
 }

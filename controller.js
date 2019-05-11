@@ -17,11 +17,12 @@ module.exports.loadMemoryById = memory.loadMemoryById;
 module.exports.postMemoryById = memory.postMemoryById;
 
 module.exports.verify = (req, res, next) => {
-  if(req.body.pass == "success"){
-    req.session.pen = true;
-    res.send(true);
-  }else{
-    res.send(false);
+  passPhrase = req.body.passPhrase;
+  if (passPhrase === config.passPhrase){
+    req.session.pen = true
+    res.send(true)
+  } else {
+    res.send(false)
   }
 }
 
