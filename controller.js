@@ -14,7 +14,9 @@ module.exports.upload = upload.upload;
 module.exports.uploadDB = upload.uploadDB;
 module.exports.memory = memory.memory;
 module.exports.loadMemoryById = memory.loadMemoryById;
-module.exports.postMemoryById = memory.postMemoryById;
+// module.exports.postMemoryById = memory.postMemoryById;
+module.exports.putMemoryById = memory.putMemoryById;
+module.exports.deleteMemoryById = memory.deleteMemoryById;
 
 module.exports.verify = (req, res, next) => {
   passPhrase = req.body.passPhrase;

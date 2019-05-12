@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //     console.log(pair[0]+ ', ' + pair[1]);
     // }
 
-    makeRequest("POST", `/memory`, formData)
+    makeRequest("PUT", `/memory`, formData)
       .then(res => {
         if(res.statusCode === 0){
           infoContainer.style.display = "none";
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //     console.log(pair[0]+ ', ' + pair[1]);
     // }
 
-    makeRequest("POST", `/memory`, formData)
+    makeRequest("DELETE", `/memory`, formData)
       .then(res => {
         if(res.statusCode === 0){
           infoContainer.style.display = "none";

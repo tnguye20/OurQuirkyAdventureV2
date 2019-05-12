@@ -25,14 +25,14 @@
        <div class="container">
         <div class="row">
           {{#each data}}
-          <div class="col s12 m4 imgContainer_{{ this._id }}" >
+          <div class="col s12 m4 imgContainer_{{ this._id }} imgContainer" >
               <div class="card">
                 <div class="card-image">
                   <img src="{{ this.link }}" data-mask="{{ this._id  }}">
-                  <span class="card-title title_{{ this._id }}" >{{ this.title }}</span>
                   <a class="btn-floating halfway-fab waves-effect waves-light pink editIcon data-mask="{{ this._id  }}""><i class="material-icons" data-mask="{{ this._id  }}">favorite</i></a>
                 </div>
                 <div class="card-content">
+                  <p class="card-title title_{{ this._id }}" ><i><u><b>{{ this.title }}</b></u></i></p>
                   <p class="note_{{ this._id }}">{{ this.note }}</p>
                 </div>
             </div>

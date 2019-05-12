@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const Dropbox = require('dropbox').Dropbox;
 const jo = require('jpeg-autorotate');
 const config = require('../config');
+const ExifImage = require('exif').ExifImage;
 
 // Render Upload Template
 module.exports.upload = (req, res, next) => {
@@ -14,6 +15,12 @@ module.exports.upload = (req, res, next) => {
 module.exports.uploadDB = async (req, res, next) => {
   const MemData = JSON.parse(req.body.memInfo);
   console.log(MemData);
+
+  // req.files.forEach( file => {
+  //   new ExifImage({image: file.buffer}, function(error, exifData){
+  //     console.log(exifData);
+  //   })
+  // });
 
   // Rotate the Image
   options = { quality: 100 };
