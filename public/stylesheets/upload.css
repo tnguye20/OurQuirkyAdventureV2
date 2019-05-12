@@ -30,5 +30,13 @@ button {
 }
 
 #previewContainer {
-  margin: 100px auto;
+  margin-bottom: 10em;
+}
+
+.rotation-wrapper-outer {
+  display: table;
+}
+.rotation-wrapper-inner {
+  padding: 50% 0;
+  height: 0;
 }

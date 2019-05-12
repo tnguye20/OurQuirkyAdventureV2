@@ -166,16 +166,25 @@ function imgOrientation(file, callback){
 function createImageElement(src, i, value){
   // Image Container Element
   let div = document.createElement("div");
-  div.classList.add("col","s4", "info_" + i);
-  div.style.transform = rotation[value];
+  div.style.marginBottom = "5px";
+  let divContainerOuter= document.createElement("div");
+  divContainerOuter.classList.add("rotation-wrapper-outer");
+  let divContainerInner= document.createElement("div");
+  divContainerInner.classList.add("rotation-wrapper-inner");
+  div.classList.add("col","m4", "s12", "info_" + i);
+  // div.style.transform = rotation[value];
 
   // Image Element
   let img = document.createElement("img");
   img.src = src;
-  // img.style.transform = rotation[value];
+  img.style.transform = rotation[value];
+  img.style.display = "block";
   img.classList.add("responsive-img");
 
-  div.appendChild(img);
+  // div.appendChild(img);
+  div.appendChild(divContainerOuter);
+  divContainerOuter.appendChild(divContainerInner);
+  divContainerInner.appendChild(img)
   div.addEventListener("click", () => { imageInfo(i) });
 
   return div;
