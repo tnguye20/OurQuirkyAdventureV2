@@ -25,15 +25,15 @@
        <div class="container">
         <div class="row">
           {{#each data}}
-          <div class="col s12 m4 imgContainer" >
+          <div class="col s12 m4 imgContainer_{{ this._id }}" >
               <div class="card">
                 <div class="card-image">
                   <img src="{{ this.link }}" data-mask="{{ this._id  }}">
-                  <span class="card-title">{{ this.title }}</span>
-                  <a class="btn-floating halfway-fab waves-effect waves-light red heartSpin"><i class="material-icons">favorite</i></a>
+                  <span class="card-title title_{{ this._id }}" >{{ this.title }}</span>
+                  <a class="btn-floating halfway-fab waves-effect waves-light pink editIcon data-mask="{{ this._id  }}""><i class="material-icons" data-mask="{{ this._id  }}">favorite</i></a>
                 </div>
                 <div class="card-content">
-                  <p>{{ this.note }}</p>
+                  <p class="note_{{ this._id }}">{{ this.note }}</p>
                 </div>
             </div>
           </div>
@@ -41,8 +41,35 @@
         </div>
        </div>
 
+      <!-- Form Template-->
+      <div id="infoContainer">
+           <div class="row">
+             <div class="col m4 offset-m4 s12">
+              <form name="editForm" id="editForm">
+                <input type="hidden" id="infoMask" name="infoMask" value="">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea id="infoTitle" name="infoTitle" class="materialize-textarea" placeholder="  "></textarea>
+                    <label for="infoTitle">Title</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea id="infoNote" name="infoNote" class="materialize-textarea" placeholder="  "></textarea>
+                    <label for="textarea1" for="infoNote">Note</label>
+                  </div>
+                </div>
+                <a class="waves-effect waves-light btn right" id="infoSubmit" >Save</a>
+                <a class="waves-effect waves-light btn right pink" id="infoCancel">Cancel</a>
+                <a class="waves-effect waves-light btn left red" id="infoDelete">Delete</a>
+              </form>
+             </div>
+          </div>
+      </div>
+
       <!--JavaScript at end of body for optimized loading-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script type='text/javascript' src='/javascripts/functions.js'></script>
       <script type='text/javascript' src='/javascripts/memory.js'></script>
     </body>
   </html>

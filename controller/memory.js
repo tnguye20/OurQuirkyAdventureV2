@@ -23,30 +23,33 @@ module.exports.memory = async (req, res, next) => {
 
 module.exports.loadMemoryById = async(req, res, next) => {
   const result = await functions.getMemoryById(req.session.token, req.params.mem_id, req.session.dropboxUserID);
-  res.render("memoryEdit", {data: result});
+  res.json(result)
 }
 
 module.exports.postMemoryById = async (req, res, next) => {
   console.log(req.body);
-  console.log(req.params.mem_id);
-  if(req.body.infoSubmit.toLowerCase() === "update"){
-    const result = await Memory.update(
-      { _id: req.params.mem_id },
+  const mem_id = req.body.infoMask;
+  if(req.body.context === "update"){
+    const result = await Memory.updateOne(
+      { _id: mem_id },
       { $set: {
         title: req.body.infoTitle,
         note: req.body.infoNote
       } }
     );
-  } else if(req.body.infoSubmit.toLowerCase() === "delete"){
+  } else if(req.body.context === "delete"){
     const promises = [];
-    const currentMemory = await Memory.findOne({ _id: req.params.mem_id  });
+    const currentMemory = await Memory.findOne({ _id: mem_id  });
     const dbx = new Dropbox({
                 accessToken: req.session.token,
                 fetch: fetch
     });
     promises.push(dbx.filesDelete({ path: currentMemory.path_lower }));
-    promises.push(Memory.deleteOne({ _id: req.params.mem_id  }));
+    promises.push(Memory.deleteOne({ _id: mem_id  }));
     const result = await Promise.all(promises);
   }
-  res.redirect("/memory");
+  res.json({
+    statusCode: 0,
+    status: "Done!"
+  })
 }

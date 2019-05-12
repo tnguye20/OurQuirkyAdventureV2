@@ -11,3 +11,27 @@
 .heartSpin:hover {
   transform: rotateY(180deg);
 }
+
+#infoContainer{
+  display: none;
+  background-color: rgba(0,0,0,0.7);
+  position: fixed;
+  top: 0;
+  margin: 0 !important;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  z-index: 3;
+}
+
+#infoContainer > div > div {
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  transform: translatey(-50%);
+  background-color: white;
+}
+
+#infoCancel {
+  margin-right: 5px;
+}
