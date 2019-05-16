@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const editForm = document.querySelector("form#editForm");
   const infoSubmit = document.querySelector("#infoSubmit");
   const infoDelete = document.querySelector("#infoDelete");
+  const imgHolder = document.querySelector("#imgHolder");
 
   infoCancel.addEventListener("click", (e) => {
     e.preventDefault();
@@ -22,13 +23,19 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   })
 
+  document.addEventListener("keyup", function(e) {
+    if(e.key === "Escape"){
+      infoContainer.style.display = "none";
+    }
+  })
+
   editIcons.forEach( el => el.addEventListener("click", (e) => {
       const id = e.target.dataset.mask;
+      const imgSrc = document.querySelector(`img.memory_${id}`).src;
       infoMask.value = id;
-      console.log(id);
       makeRequest("GET", `/memory/${id}`)
         .then(res => {
-          console.log(res);
+          imgHolder.src = imgSrc;
           infoContainer.style.display = "block";
           infoTitle.value = res.title;
           infoNote.value = res.note;

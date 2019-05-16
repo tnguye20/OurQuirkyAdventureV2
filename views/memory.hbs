@@ -28,12 +28,12 @@
           <div class="col s12 m4 imgContainer_{{ this._id }} imgContainer" >
               <div class="card">
                 <div class="card-image">
-                  <img src="{{ this.link }}" data-mask="{{ this._id  }}">
+                  <img src="{{ this.link }}" data-mask="{{ this._id  }}" class="memory_{{ this._id }}">
                   <a class="btn-floating halfway-fab waves-effect waves-light pink editIcon data-mask="{{ this._id  }}""><i class="material-icons" data-mask="{{ this._id  }}">favorite</i></a>
                 </div>
                 <div class="card-content">
-                  <p class="card-title title_{{ this._id }}" ><i><u><b>{{ this.title }}</b></u></i></p>
-                  <p class="note_{{ this._id }}">{{ this.note }}</p>
+                  <p class="card-title title title_{{ this._id }}" >{{ this.title }}</p>
+                  <p class="note note_{{ this._id }}">{{ this.note }}</p>
                 </div>
             </div>
           </div>
@@ -44,7 +44,10 @@
       <!-- Form Template-->
       <div id="infoContainer">
            <div class="row">
-             <div class="col m4 offset-m4 s12">
+             <div class="col m9 s12" id="imgCol">
+               <img id="imgHolder" />
+             </div>
+             <div class="col m3 s12" id="editCol">
               <form name="editForm" id="editForm">
                 <input type="hidden" id="infoMask" name="infoMask" value="">
                 <div class="row">
@@ -55,7 +58,7 @@
                 </div>
                 <div class="row">
                   <div class="input-field col s12">
-                    <textarea id="infoNote" name="infoNote" class="materialize-textarea" placeholder="  "></textarea>
+                    <textarea id="infoNote" name="infoNote" class="materialize-textarea" placeholder="  " rows="10"></textarea>
                     <label for="textarea1" for="infoNote">Note</label>
                   </div>
                 </div>
