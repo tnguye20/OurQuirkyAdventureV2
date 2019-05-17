@@ -30,7 +30,8 @@
     "node-cache": "^4.2.0",
     "node-fetch": "^2.2.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "ws": "^7.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.5"

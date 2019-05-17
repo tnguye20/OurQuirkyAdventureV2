@@ -12,6 +12,33 @@ document.addEventListener("DOMContentLoaded", function() {
   const infoDelete = document.querySelector("#infoDelete");
   const imgHolder = document.querySelector("#imgHolder");
 
+  /* WebSocket setup */
+  const socket = new WebSocket(`ws://${location.host}/`);
+  socket.addEventListener("open", () => { console.log("WebSocket Connected") });
+  socket.addEventListener("close", () => { console.log("WebSocket Closed") });
+  socket.addEventListener("message", (e) => {
+    try {
+      const data = JSON.parse(e.data);
+      if (data.statusCode === 0){
+        switch(data.action){
+          case "updateMemory": {
+            const { mask, title, note } = data;
+            document.querySelector(`.title_${mask}`).innerHTML = title;
+            document.querySelector(`.note_${mask}`).innerHTML = note;
+            break;
+          }
+          case "deleteMemory": {
+            const { mask } = data;
+            document.querySelector(`.imgContainer_${mask}`).remove();
+            break;
+          }
+        }
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  });
+
   infoCancel.addEventListener("click", (e) => {
     e.preventDefault();
     infoContainer.style.display = "none";
@@ -19,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   imgs.forEach( (img) => {
     img.onload = function(e){
-      e.target.closest(".imgContainer").style.opacity = 1;
+      const mask = e.target.dataset.mask;
+      document.querySelector(`.imgContainer_${mask}`).style.opacity = 1;
     }
   })
 
@@ -47,16 +75,22 @@ document.addEventListener("DOMContentLoaded", function() {
     const formData = new FormData(editForm);
     formData.append("context", "update");
 
-    // for (var pair of formData.entries()) {
-    //     console.log(pair[0]+ ', ' + pair[1]);
-    // }
-
     makeRequest("PUT", `/memory`, formData)
       .then(res => {
         if(res.statusCode === 0){
           infoContainer.style.display = "none";
           document.querySelector(`.title_${formData.get("infoMask")}`).innerHTML = formData.get("infoTitle");
           document.querySelector(`.note_${formData.get("infoMask")}`).innerHTML = formData.get("infoNote");
+
+          // Update all client
+          socket.send(JSON.stringify({
+            statusCode: 0,
+            status: "Update Memory",
+            action: "updateMemory",
+            mask: formData.get("infoMask"),
+            title: formData.get("infoTitle"),
+            note: formData.get("infoNote")
+          }))
         }
       })
   });
@@ -66,15 +100,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const formData = new FormData(editForm);
     formData.append("context", "delete");
 
-    // for (var pair of formData.entries()) {
-    //     console.log(pair[0]+ ', ' + pair[1]);
-    // }
-
     makeRequest("DELETE", `/memory`, formData)
       .then(res => {
         if(res.statusCode === 0){
           infoContainer.style.display = "none";
           document.querySelector(`.imgContainer_${formData.get("infoMask")}`).remove();
+
+          // Update all client
+          socket.send(JSON.stringify({
+            statusCode: 0,
+            status: "Delete Memory",
+            action: "deleteMemory",
+            mask: formData.get("infoMask"),
+          }))
         }
       })
   });
