@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "connect-mongo": "^2.0.1",
-    "cookie-parser""node": "~8.2.1": "~1.4.3",
+    "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^6.1.0",
     "dropbox": "^4.0.17",
