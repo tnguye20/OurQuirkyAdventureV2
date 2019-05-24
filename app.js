@@ -28,12 +28,6 @@ app.use(helmet.contentSecurityPolicy({
   setAllHeaders: true
 }));
 
-//cookie security for production: only via https
-if (app.get('env') === 'production') {
-    app.set('trust proxy', 1) // trust first proxy
-    sess.cookie.secure = true // serve secure cookies
-}
-
 // Session management
 const config = require("./config");
 const crypto = require('crypto');
@@ -60,6 +54,12 @@ const sess = {
   store: new MongoStore({
     mongooseConnection: db
   })
+}
+
+//cookie security for production: only via https
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true // serve secure cookies
 }
 
 app.use(session(sess));
